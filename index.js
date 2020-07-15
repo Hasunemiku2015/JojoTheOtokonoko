@@ -1,7 +1,12 @@
+import { Dropbox } from "dropbox";
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const fs = require("fs");
-// const ytdl = require('ytdl-core');
+// const fs = require("fs");
+
+//Dropbox
+const dbxclient = new Dropbox.Client({key: process.env.key});
+
 
 //Options
 const prefix = "!";
@@ -35,7 +40,7 @@ client.on("message", async msg => {
     //!record
     if(args[0] === "record" || args[0] === "rec"){
         recording = true;
-        await msg.channel.send("@here Recoding message in " + msg.channel +" MIND YOUR LANGUAGE");
+        await msg.channel.send("@here Recoding message in " + msg.channel +" ,MIND YOUR LANGUAGE");
         await client.user.setActivity("to messages in " + msg.channel, {type: "LISTENING"});
     }
 
@@ -52,28 +57,27 @@ client.on("message", async msg => {
 
     //Troll Commands
     //!ftl
-    
-    // if(args[0] === "fti" || args[0] === "ftl"){
-    //     let channel = msg.member.voice.channel
-    //     if(!channel){
-    //         return msg.channel.send("You need to be in a voice channel to use this command");
-    //     }
-    //     try {
-    //         var connection = await channel.join();
-    //     } catch (e) {
-    //         console.log("Error connecting to voice channel");
-    //     }
-    //     connection.play(ytdl("https://www.youtube.com/watch?v=9xq1gr48Xko"))
-    //         .on("finish", () => channel.leave())
-    //         .on("error", (error) => console.log(error));
-    // }
-    //
-    // if(args[0] === "fti-stop" || args[0] === "ftl-stop"){
-    //     if(msg.member.voice.channel){
-    //         msg.member.voice.channel.leave();
-    //         await msg.channel.send("Successfully disconnected from voice , why dont you like Fire Three Island? TAT");
-    //     }
-    // }
+    if(args[0] === "fti" || args[0] === "ftl"){
+        let channel = msg.member.voice.channel
+        if(!channel){
+            return msg.channel.send("You need to be in a voice channel to use this command");
+        }
+        try {
+            var connection = await channel.join();
+        } catch (e) {
+            console.log("Error connecting to voice channel");
+        }
+        connection.play('fti.mp3', { volume: 0.5 })
+            .on("finish", () => channel.leave())
+            .on("error", (error) => console.log(error));
+    }
+
+    if(args[0] === "fti-stop" || args[0] === "ftl-stop"){
+        if(msg.member.voice.channel){
+            msg.member.voice.channel.leave();
+            await msg.channel.send("Successfully disconnected from voice , why dont you like Fire Three Island? TAT");
+        }
+    }
 
     //!elevator
     if(args[0] === "elevator"){
@@ -88,14 +92,16 @@ client.on("message", async msg => {
 
 //Recorder
 var recording = false;
-
-
 client.on("message", msg =>{
     if(recording){
-        let server = msg.guild;
-        let appendata = "[" +Date.now()+"]" + "<" + msg.author + ">" + msg.toString();
-        fs.appendFile(server + ".txt", appendata, (err) => {
-            if (err) throw err
+        let server = msg.guild.name;
+        let appendata = "[" +Date.now()+"]" + "<" + msg.author.username + "> " + msg.toString() + "\n";
+        // fs.appendFile(server + ".txt", appendata, (err) => {
+        //     if (err) throw err
+        // });
+        
+        dbxclient.appendFile(server + ".txt", appendata, function () {
+            alert('File written!');
         });
     }
 });

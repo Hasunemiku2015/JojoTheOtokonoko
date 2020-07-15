@@ -1,10 +1,9 @@
-import { Dropbox } from "dropbox";
-
 const Discord = require('discord.js');
 const client = new Discord.Client();
 // const fs = require("fs");
 
 //Dropbox
+const Dropbox = require("dropbox");
 const dbxclient = new Dropbox.Client({key: process.env.key});
 
 

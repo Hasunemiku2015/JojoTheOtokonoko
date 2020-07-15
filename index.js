@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require("fs");
-const ytdl = require('ytdl-core');
+// const ytdl = require('ytdl-core');
 
 //Options
 const prefix = "!";
@@ -52,27 +52,28 @@ client.on("message", async msg => {
 
     //Troll Commands
     //!ftl
-    if(args[0] === "fti" || args[0] === "ftl"){
-        let channel = msg.member.voice.channel
-        if(!channel){
-            return msg.channel.send("You need to be in a voice channel to use this command");
-        }
-        try {
-            var connection = await channel.join();
-        } catch (e) {
-            console.log("Error connecting to voice channel");
-        }
-        connection.play(ytdl("https://www.youtube.com/watch?v=9xq1gr48Xko"))
-            .on("finish", () => channel.leave())
-            .on("error", (error) => console.log(error));
-    }
-
-    if(args[0] === "fti-stop" || args[0] === "ftl-stop"){
-        if(msg.member.voice.channel){
-            msg.member.voice.channel.leave();
-            await msg.channel.send("Successfully disconnected from voice , why dont you like Fire Three Island? TAT");
-        }
-    }
+    
+    // if(args[0] === "fti" || args[0] === "ftl"){
+    //     let channel = msg.member.voice.channel
+    //     if(!channel){
+    //         return msg.channel.send("You need to be in a voice channel to use this command");
+    //     }
+    //     try {
+    //         var connection = await channel.join();
+    //     } catch (e) {
+    //         console.log("Error connecting to voice channel");
+    //     }
+    //     connection.play(ytdl("https://www.youtube.com/watch?v=9xq1gr48Xko"))
+    //         .on("finish", () => channel.leave())
+    //         .on("error", (error) => console.log(error));
+    // }
+    //
+    // if(args[0] === "fti-stop" || args[0] === "ftl-stop"){
+    //     if(msg.member.voice.channel){
+    //         msg.member.voice.channel.leave();
+    //         await msg.channel.send("Successfully disconnected from voice , why dont you like Fire Three Island? TAT");
+    //     }
+    // }
 
     //!elevator
     if(args[0] === "elevator"){
@@ -97,4 +98,4 @@ client.on("message", msg =>{
             if (err) throw err
         });
     }
-})
+});
